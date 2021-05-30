@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel admina</title>
+</head>
+<body>
+
+<h1>Panel admina</h1>
+
+<table class="table table-sm caption-top" style="margin-left: 50px">
+    <caption class="fs-2 font-monospace text-dark">Lista użytkowników</caption>
+    <thead>
+    <tr>
+        <th scope="col">nazwa użytkownika</th>
+        <th scope="col">aktualne rola(e)</th>
+        <th scope="col">dodawanie roli admin</th>
+        <th scope="col">zdejmowanie roli admin</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user: ${users}">
+        <td th:text="${user.username}"></td>
+        <td>
+            <option th:each="type : ${roles}"
+                    th:value="${type.getRole()}" th:text="${type.getRole()}">
+            </option>
+        </td>
+        <td>
+            <form method="post" th:action="|/admin/addRoleAdmin/${user.id}|">
+                <input type="submit" id="button" value="Ustaw rolę admin">
+            </form>
+        </td>
+        <td>
+            <form method="post" th:action="|/admin/deleteRoleAdmin/${user.id}|">
+                <input type="submit" id="button2" value="Zdejmij rolę admin">
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
