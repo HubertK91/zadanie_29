@@ -40,23 +40,6 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public void setRoleUserById(Long id) {
-        Optional<User> user = userRepository.findById(id);
-        if (user.isPresent()) {
-            if (user.get().getRoles().contains(Role.ROLE_ADMIN)) {
-                List<UserRole> list = Collections.singletonList(new UserRole(user.get(), Role.ROLE_USER));
-                user.get().setRoles(new HashSet<>(list));
-                userRepository.save(user.get());
-            } else {
-                List<UserRole> list = Collections.singletonList(new UserRole(user.get(), Role.ROLE_ADMIN));
-                user.get().setRoles(new HashSet<>(list));
-                userRepository.save(user.get());
-            }
-        } else {
-            throw new RuntimeException();
-        }
-    }
-
     public List<User> findAllWithoutCurrentUser() {
         Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
         return findAll()
@@ -71,11 +54,25 @@ public class UserService {
         return userRepository.findByUsername(username).orElseThrow();
     }
 
+    public User findUserById(Long id) {
+        return userRepository.findById(id).orElseThrow();
+    }
+
     public void updateUserData(User user) {
         Optional<User> userEdit = userRepository.findById(user.getId());
         if (userEdit.isPresent()){
             userEdit.get().setUsername(user.getUsername());
             userEdit.get().setPassword(passwordEncoder.encode(user.getPassword()));
+            userRepository.save(userEdit.get());
+        }else {
+            throw new RuntimeException();
+        }
+    }
+
+    public void updateUserRole(User user) {
+        Optional<User> userEdit = userRepository.findById(user.getId());
+        if (userEdit.isPresent()){
+            userEdit.get().setRoles(user.getRoles());
             userRepository.save(userEdit.get());
         }else {
             throw new RuntimeException();

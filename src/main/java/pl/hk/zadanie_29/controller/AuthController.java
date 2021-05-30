@@ -3,8 +3,10 @@ package pl.hk.zadanie_29.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.hk.zadanie_29.model.User;
 import pl.hk.zadanie_29.service.UserService;
 
@@ -18,7 +20,7 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public String loginForm(@RequestParam(required = false) String error,
+    public String loginForm(@RequestParam(required = false) String error, @ModelAttribute("createAccount") User create,
                             Model model) {
         boolean showErrorMessage = error != null;
         model.addAttribute("showErrorMessage", showErrorMessage);
@@ -32,10 +34,11 @@ public class AuthController {
     }
 
     @PostMapping("/registration")
-    public String register(User user) {
+    public String register(User user, RedirectAttributes redirectAttributes) {
         String username = user.getUsername();
         String rawPassword = user.getPassword();
         userService.registerUser(username, rawPassword);
+        redirectAttributes.addFlashAttribute("createAccount", user);
         return "redirect:/loginForm";
     }
 

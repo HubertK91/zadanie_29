@@ -2,15 +2,12 @@ package pl.hk.zadanie_29.admin;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import pl.hk.zadanie_29.model.User;
 import pl.hk.zadanie_29.model.UserRole;
 import pl.hk.zadanie_29.service.UserService;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @RequestMapping("/admin")
@@ -28,22 +25,30 @@ public class AdminController {
         List<User> users = userService.findAllWithoutCurrentUser();
         model.addAttribute("users", users);
         Set<UserRole> userRole = null;
-        for (int i = 0; i < users.size(); i++) {
-            userRole = users.get(i).getRoles();
+        for (User user : users) {
+            userRole = user.getRoles();
         }
         model.addAttribute("roles", userRole);
         return "admin";
     }
 
-    @GetMapping("/addRoleAdmin")
-    public String addRoleAdmin(@RequestParam Long id){
-        userService.setRoleUserById(id);
-        return "redirect:/admin";
+    @PostMapping("/updateRole/{id}")
+    public String updateRole(@PathVariable Long id, Model model){
+        User user = userService.findUserById(id);
+        Set<UserRole> roles = user.getRoles();
+        List<UserRole> list = new ArrayList<>(roles);
+        UserRole userRole = null;
+        for (UserRole role : list) {
+            userRole = role;
+        }
+        model.addAttribute("roles", userRole);
+        model.addAttribute("user", user);
+        return "roleEdit";
     }
 
-    @GetMapping("/deleteRoleAdmin")
-    public String deleteRoleAdmin(@RequestParam Long id){
-        userService.setRoleUserById(id);
+    @PostMapping("/updateRole")
+    public String updateRole(User user){
+        userService.updateUserRole(user);
         return "redirect:/admin";
     }
 }

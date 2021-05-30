@@ -10,6 +10,7 @@
 
 <h1>Logowanie</h1>
 <p th:if="${showErrorMessage}">Niepoprawne logowanie!</p>
+
 <form method="post" th:action="@{/login}">
     <label>
         <input name="username" type="text" placeholder="Nazwa użytkownika">

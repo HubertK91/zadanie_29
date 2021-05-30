@@ -27,13 +27,8 @@
             </option>
         </td>
         <td>
-            <form method="post" th:action="|/admin/addRoleAdmin/${user.id}|">
-                <input type="submit" id="button" value="Ustaw rolę admin">
-            </form>
-        </td>
-        <td>
-            <form method="post" th:action="|/admin/deleteRoleAdmin/${user.id}|">
-                <input type="submit" id="button2" value="Zdejmij rolę admin">
+            <form method="post" th:action="|/admin/updateRole/${user.id}|">
+                <input type="submit" id="button" value="Ustaw rolę">
             </form>
         </td>
     </tr>
