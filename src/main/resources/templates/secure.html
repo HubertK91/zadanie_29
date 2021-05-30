@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Strona dla zalogowanych</title>
+</head>
+<body>
+
+<h1>Strona dla zalogowanych</h1>
+
+<h2>Edycja użytkownika</h2>
+<form method="post" th:action="@{/updateDataUser}" th:object="${currentUser}">
+    <input th:field="*{id}" type="hidden"><br>
+    <input th:field="*{username}" type="text" placeholder="Nazwa użytkownika"><br>
+    <input th:field="*{password}" type="password" placeholder="Hasło"><br>
+    <input type="submit" value="Zatwierdź dane">
+</form>
+
+<a href="/updateDataUser">Edytuj dane</a>
+<a href="/logout">Wyloguj</a>
+
+</body>
+</html>
